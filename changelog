@@ -1,0 +1,38 @@
+htslib (1.1-1) unstable; urgency=medium
+
+  1357fbd Merge tag '1.1' into debian/unstable
+  87549cd Updated symbols file.  One symbol is missing.
+  873ea9b Removed orphan paragraph in machine-readable copyright file.
+  49de2b9 Allow parallel build.
+  7fe3bb5 Normalise control file (VCS-Browser, Pre-Depends).
+  0e5e9e6 Conforms to Policy 3.9.6.
+
+ -- Charles Plessy <plessy@debian.org>  Wed, 24 Sep 2014 21:24:11 +0900
+
+htslib (1.0-2) unstable; urgency=medium
+
+  Uploaded to unstable (see previous changelog from experimental).
+
+ -- Charles Plessy <plessy@debian.org>  Tue, 16 Sep 2014 20:27:04 +0900
+
+htslib (1.0-1) experimental; urgency=low
+
+  cc559b8 Merged with upstream's master branch.
+  74b9d7b Build on the master branch.
+  04815a7 New major version (libhts0 -> libhts1).
+  98c18ca Updated symbols file.
+  22fef0c Install pkgconfig file.
+  420896b Override PACKAGE_VERSION to avoid tags with a slash in the name.
+  79b5d4e Use the Debian package version as PACKAGE_VERSION.
+  72b5c4a Finally use the 3.0 (quilt) format in single-debian-patch mode.
+  d870946 Adjusted substitution variables following dpkg's warnings.
+  9469458 Removed debug command accidentally introduced.
+  8c7f7d4 Replace the old tabix package from the tabix source package.
+
+ -- Charles Plessy <plessy@debian.org>  Sun, 17 Aug 2014 20:12:28 +0900
+
+htslib (0.2.0~rc3-1) unstable; urgency=low
+
+  * Initial release. (Closes: #729282)
+
+ -- Charles Plessy <plessy@debian.org>  Sat, 16 Nov 2013 15:35:03 +0900
