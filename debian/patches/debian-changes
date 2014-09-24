@@ -1,0 +1,61 @@
+Description: <short summary of the patch>
+ TODO: Put a short summary on the line above and replace this paragraph
+ with a longer explanation of this change. Complete the meta-information
+ with other relevant fields (see below for details). To make it easier, the
+ information below has been extracted from the changelog. Adjust it or drop
+ it.
+ .
+ htslib (1.1-1) unstable; urgency=medium
+ .
+   1357fbd Merge tag '1.1' into debian/unstable
+   87549cd Updated symbols file.  One symbol is missing.
+   873ea9b Removed orphan paragraph in machine-readable copyright file.
+   49de2b9 Allow parallel build.
+   7fe3bb5 Normalise control file (VCS-Browser, Pre-Depends).
+   0e5e9e6 Conforms to Policy 3.9.6.
+Author: Charles Plessy <plessy@debian.org>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: <url in upstream bugtracker>
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: <YYYY-MM-DD>
+
+--- /dev/null
++++ htslib-1.1/.travis.yml
+@@ -0,0 +1,8 @@
++# Control file for continuous integration testing at http://travis-ci.org/
++
++language: c
++compiler:
++  - clang
++  - gcc
++
++script: make -e && make test
+--- /dev/null
++++ htslib-1.1/README.md
+@@ -0,0 +1,17 @@
++HTSlib is an implementation of a unified C library for accessing common file
++formats, such as [SAM, CRAM and VCF][1], used for high-throughput sequencing
++data, and is the core library used by [samtools][2] and [bcftools][3].
++HTSlib only depends on [zlib][4].
++It is known to be compatible with gcc, g++ and clang.
++
++HTSlib implements a generalized BAM index, with file extension `.csi`
++(coordinate-sorted index). The HTSlib file reader first looks for the new index
++and then for the old if the new index is absent.
++
++This project also includes the popular tabix indexer, which indexes both `.tbi`
++and `.csi` formats, and the bgzip compression utility.
++
++[1]: http://samtools.github.io/hts-specs/
++[2]: http://github.com/samtools/samtools
++[3]: http://samtools.github.io/bcftools/
++[4]: http://zlib.net/
