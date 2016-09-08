@@ -1,0 +1,38 @@
+#!/usr/bin/make -f
+
+# export DEB_BUILD_MAINT_OPTIONS = hardening=+all # Build fails due to -fpie
+export DEB_BUILD_MAINT_OPTIONS = hardening=+bindnow
+
+export DH_VERBOSE=1
+DEB_VERSION := $(shell dpkg-parsechangelog | egrep '^Version:' | cut -f 2 -d ' ')
+
+%:
+	dh $@ --parallel
+
+override_dh_auto_test:
+	dh_auto_test
+	$(RM) test/*.tmp test/*.tmp.* test/*.o test/*.dSYM \
+              test/fieldarith test/hfile test/test_view test/test-vcf-api test/test-vcf-sweep
+
+override_dh_auto_configure:
+	autoconf
+	./configure --enable-libcurl
+
+override_dh_auto_build:
+	dh_auto_build -- \
+	  CFLAGS="$$(dpkg-buildflags --get CFLAGS)" \
+	  CPPFLAGS="-I. -DSAMTOOLS=1 $$(dpkg-buildflags --get CPPFLAGS)" \
+	  LDFLAGS="$$(dpkg-buildflags --get LDFLAGS)" \
+# re-try later	  LDLIBS=-lhts \
+	  PACKAGE_VERSION="$(DEB_VERSION)" \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH)
+
+override_dh_auto_install:
+	rm $(CURDIR)/test/sam $(CURDIR)/test/test-regidx
+	dh_auto_install -- \
+	  prefix=/usr \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
+	  PACKAGE_VERSION="$(DEB_VERSION)"
+
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS
