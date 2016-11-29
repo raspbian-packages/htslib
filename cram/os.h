@@ -153,6 +153,13 @@ extern "C" {
 
 #endif
 
+/*
+ * in case PATH_MAX is not defined (like in hurd)
+ */
+#ifndef PATH_MAX
+#  define PATH_MAX 1024
+#endif
+
 /*-----------------------------------------------------------------------------
  * Allow for unaligned memory access. This is used in BAM code as the packed
  * structure has 4-byte cigar ints after the variable length name.
