@@ -1068,6 +1068,12 @@ err_recover:
     }
 }
 
+#define READUNALIGNED(ptr,type) ({ \
+    type tmp;\
+    memcpy(&tmp,ptr,sizeof(type));\
+    tmp;\
+})
+
 int sam_format1(const bam_hdr_t *h, const bam1_t *b, kstring_t *str)
 {
     int i;
@@ -1131,36 +1137,36 @@ int sam_format1(const bam_hdr_t *h, const bam1_t *b, kstring_t *str)
         } else if (type == 'S') {
             if (s+2 <= b->data + b->l_data) {
                 kputsn("i:", 2, str);
-                kputw(*(uint16_t*)s, str);
+                kputw(READUNALIGNED(s,uint16_t), str);
                 s += 2;
             } else return -1;
         } else if (type == 's') {
             if (s+2 <= b->data + b->l_data) {
                 kputsn("i:", 2, str);
-                kputw(*(int16_t*)s, str);
+                kputw(READUNALIGNED(s,int16_t), str);
                 s += 2;
             } else return -1;
         } else if (type == 'I') {
             if (s+4 <= b->data + b->l_data) {
                 kputsn("i:", 2, str);
-                kputuw(*(uint32_t*)s, str);
+                kputuw(READUNALIGNED(s,uint32_t), str);
                 s += 4;
             } else return -1;
         } else if (type == 'i') {
             if (s+4 <= b->data + b->l_data) {
                 kputsn("i:", 2, str);
-                kputw(*(int32_t*)s, str);
+                kputw(READUNALIGNED(s,int32_t), str);
                 s += 4;
             } else return -1;
         } else if (type == 'f') {
             if (s+4 <= b->data + b->l_data) {
-                ksprintf(str, "f:%g", *(float*)s);
+                ksprintf(str, "f:%g", READUNALIGNED(s,float));
                 s += 4;
             } else return -1;
 
         } else if (type == 'd') {
             if (s+8 <= b->data + b->l_data) {
-                ksprintf(str, "d:%g", *(double*)s);
+                ksprintf(str, "d:%g", READUNALIGNED(s,double));
                 s += 8;
             } else return -1;
         } else if (type == 'Z' || type == 'H') {
@@ -1184,11 +1190,11 @@ int sam_format1(const bam_hdr_t *h, const bam1_t *b, kstring_t *str)
                 kputc(',', str);
                 if ('c' == sub_type)      { kputw(*(int8_t*)s, str); ++s; }
                 else if ('C' == sub_type) { kputw(*(uint8_t*)s, str); ++s; }
-                else if ('s' == sub_type) { kputw(*(int16_t*)s, str); s += 2; }
-                else if ('S' == sub_type) { kputw(*(uint16_t*)s, str); s += 2; }
-                else if ('i' == sub_type) { kputw(*(int32_t*)s, str); s += 4; }
-                else if ('I' == sub_type) { kputuw(*(uint32_t*)s, str); s += 4; }
-                else if ('f' == sub_type) { ksprintf(str, "%g", *(float*)s); s += 4; }
+                else if ('s' == sub_type) { kputw(READUNALIGNED(s,int16_t), str); s += 2; }
+                else if ('S' == sub_type) { kputw(READUNALIGNED(s,uint16_t), str); s += 2; }
+                else if ('i' == sub_type) { kputw(READUNALIGNED(s,int32_t), str); s += 4; }
+                else if ('I' == sub_type) { kputuw(READUNALIGNED(s,uint32_t), str); s += 4; }
+                else if ('f' == sub_type) { ksprintf(str, "%g", READUNALIGNED(s,float)); s += 4; }
                 else return -1;
             }
         }
@@ -1295,9 +1301,9 @@ int32_t bam_aux2i(const uint8_t *s)
     type = *s++;
     if (type == 'c') return (int32_t)*(int8_t*)s;
     else if (type == 'C') return (int32_t)*(uint8_t*)s;
-    else if (type == 's') return (int32_t)*(int16_t*)s;
-    else if (type == 'S') return (int32_t)*(uint16_t*)s;
-    else if (type == 'i' || type == 'I') return *(int32_t*)s;
+    else if (type == 's') return (int32_t)READUNALIGNED(s,int16_t);
+    else if (type == 'S') return (int32_t)READUNALIGNED(s,uint16_t);
+    else if (type == 'i' || type == 'I') return READUNALIGNED(s,int32_t);
     else return 0;
 }
 
@@ -1305,8 +1311,8 @@ double bam_aux2f(const uint8_t *s)
 {
     int type;
     type = *s++;
-    if (type == 'd') return *(double*)s;
-    else if (type == 'f') return *(float*)s;
+    if (type == 'd') return READUNALIGNED(s,double);
+    else if (type == 'f') return READUNALIGNED(s,float);
     else return 0.0;
 }
 
