@@ -1,3 +1,3 @@
 Tests: run-unit-test
-Depends: @
+Depends: @, build-essential, @builddeps@
 Restrictions: allow-stderr

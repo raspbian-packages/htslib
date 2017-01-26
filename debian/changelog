@@ -1,4 +1,4 @@
-htslib (1.3.2-1+rpi1) stretch-staging; urgency=medium
+htslib (1.3.2-2+rpi1) stretch-staging; urgency=medium
 
   [changes brought forward from 1.2.1-1+rpi1 by Peter Michael Green <plugwash@raspbian.org> at Tue, 29 Sep 2015 19:03:00 +0000]
   * Fix bus errors in testsuite.
@@ -9,7 +9,15 @@ htslib (1.3.2-1+rpi1) stretch-staging; urgency=medium
   * Remove single-debian-patch from debian/source/options, it was almost certainly responsible for
     the above source package screwup.
 
- -- Raspbian forward porter <root@raspbian.org>  Tue, 29 Nov 2016 02:43:40 +0000
+ -- Raspbian forward porter <root@raspbian.org>  Thu, 26 Jan 2017 06:59:17 +0000
+
+htslib (1.3.2-2) unstable; urgency=medium
+
+  * Add build-essential and @builddeps@ to autopkgtest
+  * debhelper 10
+  * d/watch: version=4
+
+ -- Andreas Tille <tille@debian.org>  Sat, 14 Jan 2017 19:23:52 +0100
 
 htslib (1.3.2-1) unstable; urgency=medium
 
