@@ -1,0 +1,6 @@
+test/* /usr/share/htslib-test/test
+cram/*.c /usr/share/htslib-test/cram
+Makefile /usr/share/htslib-test
+*.mk /usr/share/htslib-test
+*.c /usr/share/htslib-test
+*.h /usr/share/htslib-test
