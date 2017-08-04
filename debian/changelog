@@ -1,0 +1,214 @@
+htslib (1.5-1) unstable; urgency=medium
+
+  * Team upload
+
+  [ Andreas Tille ]
+  * New upstream version
+  * Standards-Version: 4.0.0 (no changes needed)
+  * do not parse d/changelog explicitly
+  * hardening=+all
+  * install htslib*.mk files that are used in bcftools
+
+  [ Steffen Moeller ]
+  * [upstream/metadata] Added reference to OMICtools
+
+  [ Matthias Klumpp ]
+  * libhts-dev: Depend on missing liblzma-dev
+  * Wrap and sort
+
+ -- Matthias Klumpp <mak@debian.org>  Thu, 03 Aug 2017 22:56:42 -0400
+
+htslib (1.4.1-5) unstable; urgency=medium
+
+  * Team upload
+  * Dereference symlinks to fix autopkgtest (Closes: #866137)
+
+ -- Graham Inggs <ginggs@debian.org>  Wed, 19 Jul 2017 10:37:52 +0200
+
+htslib (1.4.1-4) unstable; urgency=medium
+
+  * Team upload
+  * Fix FTBFS on s390x and sparc64, thanks Adrian Bunk (Closes: #865010)
+
+ -- Graham Inggs <ginggs@debian.org>  Tue, 18 Jul 2017 00:49:30 +0200
+
+htslib (1.4.1-3) unstable; urgency=medium
+
+  * Team upload.
+  * Fix FTBFS on i386. Thanks to Adrian Bunk for the patch.
+    Closes: #865012
+
+ -- Sascha Steinbiss <satta@debian.org>  Mon, 17 Jul 2017 18:25:56 +0200
+
+htslib (1.4.1-2) unstable; urgency=medium
+
+  * Create symlinks only for arch=indep target when target dir exists
+    Closes: #864979
+
+ -- Andreas Tille <tille@debian.org>  Sun, 18 Jun 2017 14:19:22 +0200
+
+htslib (1.4.1-1) unstable; urgency=medium
+
+  * New upstream version
+
+ -- Andreas Tille <tille@debian.org>  Sun, 18 Jun 2017 00:17:35 +0200
+
+htslib (1.4-3) experimental; urgency=medium
+
+  * add the cram_to_bam function to the public interface of htslib because
+    it is used by code in Sambamba
+
+ -- Andreas Tille <tille@debian.org>  Thu, 04 May 2017 10:57:31 +0200
+
+htslib (1.4-2) experimental; urgency=medium
+
+  * Include htsfile binary into tabix package since its used by manta
+    package
+
+ -- Andreas Tille <tille@debian.org>  Tue, 02 May 2017 15:42:11 +0200
+
+htslib (1.4-1) experimental; urgency=medium
+
+  * New upstream version
+  * Drop autoconf from Build-Depends
+  * Add libbz2-dev and liblzma-dev to Build-Depends
+  * Remove binary files from test results
+  * Remove symbols file
+  * Change library name to match soname
+
+ -- Andreas Tille <tille@debian.org>  Tue, 21 Mar 2017 17:44:03 +0100
+
+htslib (1.3.2-3) experimental; urgency=medium
+
+  * Install header files from cram dir in -dev package since these are
+    used in libseqlib
+  * Fix pkg-config
+
+ -- Andreas Tille <tille@debian.org>  Fri, 10 Feb 2017 08:46:29 +0100
+
+htslib (1.3.2-2) unstable; urgency=medium
+
+  * Add build-essential and @builddeps@ to autopkgtest
+  * debhelper 10
+  * d/watch: version=4
+
+ -- Andreas Tille <tille@debian.org>  Sat, 14 Jan 2017 19:23:52 +0100
+
+htslib (1.3.2-1) unstable; urgency=medium
+
+  * New upstream version
+
+ -- Andreas Tille <tille@debian.org>  Fri, 04 Nov 2016 12:58:19 +0100
+
+htslib (1.3.1-3) unstable; urgency=medium
+
+  * Fix build on hurd (thanks for the patch to Svante Signell
+    <svante.signell@gmail.com>)
+    Closes: #836190
+  * Add myself to uploaders
+
+ -- Andreas Tille <tille@debian.org>  Thu, 01 Sep 2016 10:01:23 +0200
+
+htslib (1.3.1-2) unstable; urgency=medium
+
+  [ Canberk Koç ]
+  * Team upload.
+  * Autopktest added
+
+  [ Andreas Tille ]
+  * hardening=+bindnow
+
+ -- Canberk Koç <canberkkoc@gmail.com>  Wed, 03 Aug 2016 04:21:17 +0300
+
+htslib (1.3.1-1) unstable; urgency=medium
+
+  36bf59a Merge tag '1.3.1' into debian/unstable
+  559f8b4 Remove add_largefile.patch, applied upstream.
+  7163afb Update symbols file. Missing _vcf_parse_format@Base and fai_read@Base.
+  c2c1df3 Build-depend on libcurl4-gnutls-dev and libssl-dev.
+  3b219b8 Enable libcurl.
+  9101580 Conforms to the Policy version 3.9.8.
+
+ -- Charles Plessy <plessy@debian.org>  Mon, 25 Apr 2016 22:28:11 +0900
+
+htslib (1.3-2) unstable; urgency=medium
+
+  * Team upload
+
+  [ Steffen Moeller and Jon Ison ]
+  * Introduction of EDAM annotation
+
+  [ Sascha Steinbiss ]
+  * Include upstream patch for large file support
+  * Run configure as part of the build
+
+ -- Sascha Steinbiss <sascha@steinbiss.name>  Mon, 08 Feb 2016 16:46:35 +0000
+
+htslib (1.3-1) unstable; urgency=medium
+
+  * Team upload
+  * New upstream version
+  * Ignore metadata files different between git and tarball
+
+ -- Sascha Steinbiss <sascha@steinbiss.name>  Sat, 30 Jan 2016 12:16:06 +0000
+
+htslib (1.2.1-2) unstable; urgency=medium
+
+  * Team upload
+  * Enable build on hurd-i386
+    Closes: #793512
+  * More verbose description vor -dev and -test package
+  * Fix lintian override
+  * Verified Mayhem bug report which is solved in this version
+    Closes: #716376
+
+ -- Andreas Tille <tille@debian.org>  Wed, 09 Dec 2015 17:00:47 +0100
+
+htslib (1.2.1-1) unstable; urgency=medium
+
+  0662716 Merge tag '1.2.1' into debian/unstable
+  084f27d Install NEWS as upstream changelog.
+  316fb96 Override a Lintian false positive.
+  3363679 Clean test directory.
+  69bf167 Corrected a typo in tabix description.
+
+ -- Charles Plessy <plessy@debian.org>  Mon, 25 May 2015 13:35:03 +0900
+
+htslib (1.1-1) unstable; urgency=medium
+
+  1357fbd Merge tag '1.1' into debian/unstable
+  87549cd Updated symbols file.  One symbol is missing.
+  873ea9b Removed orphan paragraph in machine-readable copyright file.
+  49de2b9 Allow parallel build.
+  7fe3bb5 Normalise control file (VCS-Browser, Pre-Depends).
+  0e5e9e6 Conforms to Policy 3.9.6.
+
+ -- Charles Plessy <plessy@debian.org>  Wed, 24 Sep 2014 21:24:11 +0900
+
+htslib (1.0-2) unstable; urgency=medium
+
+  Uploaded to unstable (see previous changelog from experimental).
+
+ -- Charles Plessy <plessy@debian.org>  Tue, 16 Sep 2014 20:27:04 +0900
+
+htslib (1.0-1) experimental; urgency=low
+
+  cc559b8 Merged with upstream's master branch.
+  74b9d7b Build on the master branch.
+  04815a7 New major version (libhts0 -> libhts1).
+  98c18ca Updated symbols file.
+  22fef0c Install pkgconfig file.
+  420896b Override PACKAGE_VERSION to avoid tags with a slash in the name.
+  79b5d4e Use the Debian package version as PACKAGE_VERSION.
+  72b5c4a Finally use the 3.0 (quilt) format in single-debian-patch mode.
+  d870946 Adjusted substitution variables following dpkg's warnings.
+  9469458 Removed debug command accidentally introduced.
+  8c7f7d4 Replace the old tabix package from the tabix source package.
+
+ -- Charles Plessy <plessy@debian.org>  Sun, 17 Aug 2014 20:12:28 +0900
+
+htslib (0.2.0~rc3-1) unstable; urgency=low
+
+  * Initial release. (Closes: #729282)
+
+ -- Charles Plessy <plessy@debian.org>  Sat, 16 Nov 2013 15:35:03 +0900

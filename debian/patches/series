@@ -1,0 +1,5 @@
+define_PATH_MAX.patch
+literal_version.patch
+fix_pkg-config.patch
+htslib-add-cram_to_bam.patch
+fPIC.patch
