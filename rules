@@ -1,0 +1,50 @@
+#!/usr/bin/make -f
+
+# export DEB_BUILD_MAINT_OPTIONS = hardening=+all # Build fails due to -fpie
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+export DH_VERBOSE=1
+
+include /usr/share/dpkg/default.mk
+
+export DEB_CFLAGS_MAINT_APPEND = -fno-strict-aliasing
+
+%:
+	dh $@
+
+override_dh_auto_test:
+	dh_auto_test
+	$(RM) test/*.tmp test/*.tmp.* test/*.o test/*.dSYM \
+              test/fieldarith test/hfile test/test_view test/test-vcf-api test/test-vcf-sweep
+
+override_dh_auto_configure:
+	autoconf
+	./configure --enable-libcurl
+
+override_dh_auto_build:
+	dh_auto_build -- \
+	  CFLAGS="$$(dpkg-buildflags --get CFLAGS)" \
+	  CPPFLAGS="-I. -DSAMTOOLS=1 $$(dpkg-buildflags --get CPPFLAGS)" \
+	  LDFLAGS="$$(dpkg-buildflags --get LDFLAGS)" \
+# re-try later	  LDLIBS=-lhts \
+	  PACKAGE_VERSION="$(DEB_VERSION)" \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH)
+
+override_dh_auto_install:
+	for binary in sam test-regidx hts_endian test-bcf-sr test_bgzf ; do \
+	    rm $(CURDIR)/test/$${binary} ; \
+	done
+	dh_auto_install -- \
+	  prefix=/usr \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
+	  PACKAGE_VERSION="$(DEB_VERSION)"
+
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS
+
+override_dh_link-indep:
+	dh_link -i
+	# provide header files as expected by the Makefile of the test suite via symlinks
+	for l in `ls debian/libhts-dev/usr/include/htslib/cram/*.h` ; do \
+	    ln -s ../../../include/htslib/cram/`basename $$l` $(CURDIR)/debian/htslib-test/usr/share/htslib-test/cram/ ; \
+	done
