@@ -1,0 +1,5 @@
+#! /usr/bin/dh-exec
+usr/lib/${DEB_HOST_MULTIARCH}/libhts.a	usr/lib/htslib/libhts.a
+usr/bin/tabix				usr/lib/htslib/tabix
+usr/bin/bgzip				usr/lib/htslib/bgzip
+usr/include/htslib			usr/lib/htslib/htslib
