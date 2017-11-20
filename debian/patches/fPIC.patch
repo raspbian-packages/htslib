@@ -1,0 +1,16 @@
+Description: Build with -fPIC instead of -fpic
+ It doesn't make a difference on x86, but is required for
+ linking the library on s390x and sparc64.
+Author: Adrian Bunk <bunk@debian.org>
+
+--- htslib-1.4.1.orig/Makefile
++++ htslib-1.4.1/Makefile
+@@ -34,7 +34,7 @@ CPPFLAGS =
+ # For testing strict C99 support add -std=c99 -D_XOPEN_SOURCE=600
+ #CFLAGS   = -g -Wall -O2 -pedantic -std=c99 -D_XOPEN_SOURCE=600 -D__FUNCTION__=__func__
+ CFLAGS   = -g -Wall -O2
+-EXTRA_CFLAGS_PIC = -fpic
++EXTRA_CFLAGS_PIC = -fPIC
+ LDFLAGS  =
+ LIBS     = $(htslib_default_libs)
+ 

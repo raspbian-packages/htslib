@@ -1,0 +1,18 @@
+Description: Fix pkg-config
+ Cflags are just pointing to system default include dir.  However, files are in
+ subdirectory which cram/*.h input files are kept in.  To be found pkg-config
+ needs to point to this dir
+Author: Andreas Tille <tille@debian.org>
+Last-Update: Thu, 09 Feb 2017 13:39:57 +0100
+
+--- a/htslib.pc.in
++++ b/htslib.pc.in
+@@ -9,7 +9,7 @@ static_libs=@static_LIBS@
+ Name: htslib
+ Description: C library for high-throughput sequencing data formats
+ Version: @-PACKAGE_VERSION@
+-Cflags: -I${includedir}
++Cflags: -I${includedir}/htslib
+ Libs: -L${libdir} -lhts
+ Libs.private: -L${libdir} @private_LIBS@ -lhts -lm -lpthread
+ Requires.private: zlib @pc_requires@

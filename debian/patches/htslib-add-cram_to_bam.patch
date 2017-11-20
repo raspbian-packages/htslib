@@ -1,0 +1,28 @@
+Description: This patch adds the cram_to_bam function to the public interface of htslib,
+ because it is used by code in Sambamba.
+Author: Roel Janssen <roel@gnu.org>
+Last-Update: 3 May 2016
+Origin: https://github.com/UMCUGenetics/guix-additions/blob/master/htslib-add-cram_to_bam.patch
+
+--- a/cram/cram_decode.c
++++ b/cram/cram_decode.c
+@@ -2825,7 +2825,7 @@ int cram_decode_slice_mt(cram_fd *fd, cr
+  * Returns the used size of the bam record on success
+  *         -1 on failure.
+  */
+-static int cram_to_bam(SAM_hdr *bfd, cram_fd *fd, cram_slice *s,
++int cram_to_bam(SAM_hdr *bfd, cram_fd *fd, cram_slice *s,
+ 		       cram_record *cr, int rec, bam_seq_t **bam) {
+     int bam_idx, rg_len;
+     char name_a[1024], *name;
+--- a/cram/cram_decode.h
++++ b/cram/cram_decode.h
+@@ -104,6 +104,8 @@ cram_block_slice_hdr *cram_decode_slice_
+ int cram_decode_slice(cram_fd *fd, cram_container *c, cram_slice *s,
+ 		      SAM_hdr *hdr);
+ 
++int cram_to_bam(SAM_hdr *bfd, cram_fd *fd, cram_slice *s,
++                cram_record *cr, int rec, bam_seq_t **bam);
+ 
+ #ifdef __cplusplus
+ }
