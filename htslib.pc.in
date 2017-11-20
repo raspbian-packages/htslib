@@ -9,7 +9,7 @@ static_libs=@static_LIBS@
 Name: htslib
 Description: C library for high-throughput sequencing data formats
 Version: @-PACKAGE_VERSION@
-Cflags: -I${includedir}
+Cflags: -I${includedir}/htslib
 Libs: -L${libdir} -lhts
 Libs.private: -L${libdir} @private_LIBS@ -lhts -lm -lpthread
 Requires.private: zlib @pc_requires@
