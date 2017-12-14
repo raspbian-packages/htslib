@@ -1,0 +1,4 @@
+define_PATH_MAX.patch
+htslib-add-cram_to_bam.patch
+fPIC.patch
+877670.patch

@@ -1,0 +1,53 @@
+#!/usr/bin/make -f
+
+# export DEB_BUILD_MAINT_OPTIONS = hardening=+all # Build fails due to -fpie
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+export DH_VERBOSE=1
+
+include /usr/share/dpkg/default.mk
+
+ifneq (,$(filter $(DEB_HOST_ARCH),i386 kfreebsd-i386 hurd-i386))
+  export DEB_CFLAGS_MAINT_APPEND=-fno-strict-aliasing -fno-code-hoisting
+endif
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+	# create clean copy of test dir
+	cp -a test test_backup
+	autoconf
+	dh_auto_configure -- --enable-libcurl
+
+override_dh_auto_build:
+	dh_auto_build -- \
+	  CFLAGS="$$(dpkg-buildflags --get CFLAGS)" \
+	  CPPFLAGS="-I. -DSAMTOOLS=1 $$(dpkg-buildflags --get CPPFLAGS)" \
+	  LDFLAGS="$$(dpkg-buildflags --get LDFLAGS)" \
+# re-try later	  LDLIBS=-lhts \
+	  PACKAGE_VERSION="$(DEB_VERSION)" \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH)
+
+override_dh_auto_install:
+	for binary in sam test-regidx hts_endian test-bcf-sr test_bgzf ; do \
+	    rm $(CURDIR)/test/$${binary} ; \
+	done
+	dh_auto_install -- \
+	  prefix=/usr \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
+	  PACKAGE_VERSION="$(DEB_VERSION)"
+	# restore clean copy of test dir before dh_install is run
+	# This should not be done earlier since dh_auto_install contains some unconditional removals
+	$(RM) -r test
+	mv test_backup test
+
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS
+
+override_dh_link-indep:
+	dh_link -i
+	# provide header files as expected by the Makefile of the test suite via symlinks
+	for l in `ls debian/libhts-dev/usr/include/htslib/cram/*.h` ; do \
+	    ln -s ../../../include/htslib/cram/`basename $$l` $(CURDIR)/debian/htslib-test/usr/share/htslib-test/cram/ ; \
+	done
