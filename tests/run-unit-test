@@ -1,0 +1,19 @@
+#!/bin/bash
+set -e
+
+pkg="htslib"
+
+if [ "$AUTOPKGTEST_TMP" = "" ] ; then
+  AUTOPKGTEST_TMP=`mktemp -d /tmp/${pkg}-test.XXXXXX`
+fi
+
+cp -aL /usr/share/${pkg}-test/* $AUTOPKGTEST_TMP
+
+cd $AUTOPKGTEST_TMP
+
+sed -i 's#\$(HTSPREFIX)#/usr/include/#g' htslib_vars.mk
+sed -i 's#\$(HTSLIB)#/usr/include/#g' htslib.mk
+
+CFLAGS="-O2 -fno-strict-aliasing -fno-code-hoisting" make -e check
+
+echo "PASS"
