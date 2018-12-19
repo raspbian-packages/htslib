@@ -1,0 +1,4 @@
+define_PATH_MAX.patch
+fPIC.patch
+#877670.patch	# applied by upstream
+testShebang.patch
