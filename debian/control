@@ -1,0 +1,111 @@
+Source: htslib
+Maintainer: Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>
+Uploaders: Charles Plessy <plessy@debian.org>,
+           Andreas Tille <tille@debian.org>,
+           Michael R. Crusoe <michael.crusoe@gmail.com>
+Section: science
+Priority: optional
+Build-Depends: debhelper (>= 11~),
+               dh-exec,
+               libbz2-dev,
+               libcurl4-gnutls-dev,
+               liblzma-dev,
+               libssl-dev,
+               zlib1g-dev
+Standards-Version: 4.2.1
+Vcs-Browser: https://salsa.debian.org/med-team/htslib
+Vcs-Git: https://salsa.debian.org/med-team/htslib.git
+Homepage: https://github.com/samtools/htslib
+
+Package: libhts2
+Architecture: any
+Multi-Arch: same
+Section: libs
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Pre-Depends: ${misc:Pre-Depends}
+Breaks: python-pysam (<< 0.15~), python3-pysam (<< 0.15~)
+Description: C library for high-throughput sequencing data formats
+ HTSlib is an implementation of a unified C library for accessing common file
+ formats, such as SAM (Sequence Alignment/Map), CRAM and VCF (Variant Call
+ Format), used for high-throughput sequencing data, and is the core library
+ used by samtools and bcftools. HTSlib only depends on zlib. It is known to be
+ compatible with gcc, g++ and clang.
+ .
+ HTSlib implements a generalized BAM (binary SAM) index, with file extension
+ ‘csi’ (coordinate-sorted index). The HTSlib file reader first looks for the
+ new index and then for the old if the new index is absent.
+
+Package: libhts-dev
+Architecture: any
+Multi-Arch: same
+Section: libdevel
+Depends: libhts2 (= ${binary:Version}),
+         liblzma-dev,
+         zlib1g-dev,
+         ${misc:Depends}
+Description: development files for the HTSlib
+ HTSlib is an implementation of a unified C library for accessing common file
+ formats, such as SAM (Sequence Alignment/Map), CRAM and VCF (Variant Call
+ Format), used for high-throughput sequencing data, and is the core library
+ used by samtools and bcftools. HTSlib only depends on zlib. It is known to be
+ compatible with gcc, g++ and clang.
+ .
+ HTSlib implements a generalized BAM (binary SAM) index, with file extension
+ ‘csi’ (coordinate-sorted index). The HTSlib file reader first looks for the
+ new index and then for the old if the new index is absent.
+ .
+ This package contains development files for the HTSlib: headers, static
+ library, manual pages, etc.
+
+Package: libhts-private-dev
+Architecture: all
+Section: libdevel
+Depends: libhts-dev (>= 1.5-5),
+         ${misc:Depends}
+Breaks: libhts-dev (<= 1.5-4)
+Description: private development files for the HTSlib (use with care)
+ HTSlib is an implementation of a unified C library for accessing common file
+ formats, such as SAM (Sequence Alignment/Map), CRAM and VCF (Variant Call
+ Format), used for high-throughput sequencing data, and is the core library
+ used by samtools and bcftools. HTSlib only depends on zlib. It is known to be
+ compatible with gcc, g++ and clang.
+ .
+ HTSlib implements a generalized BAM (binary SAM) index, with file extension
+ ‘csi’ (coordinate-sorted index). The HTSlib file reader first looks for the
+ new index and then for the old if the new index is absent.
+ .
+ This package contains private header files for the HTSlib.  They are *not*
+ intended for general use but libseqlib needs these files.
+
+Package: htslib-test
+Architecture: all
+Depends: libhts-private-dev,
+         ${misc:Depends},
+         ${perl:Depends}
+Description: Test data for HTSlib
+ HTSlib is an implementation of a unified C library for accessing common file
+ formats, such as SAM (Sequence Alignment/Map), CRAM and VCF (Variant Call
+ Format), used for high-throughput sequencing data, and is the core library
+ used by samtools and bcftools. HTSlib only depends on zlib. It is known to be
+ compatible with gcc, g++ and clang.
+ .
+ HTSlib implements a generalized BAM (binary SAM) index, with file extension
+ ‘csi’ (coordinate-sorted index). The HTSlib file reader first looks for the
+ new index and then for the old if the new index is absent.
+ .
+ This package contains test files and scripts for the HTSlib.
+
+Package: tabix
+Architecture: any
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Description: generic indexer for TAB-delimited genome position files
+ Tabix indexes files where some columns indicate sequence coordinates: name
+ (usually a chromosome), start and stop. The input data file must be position
+ sorted and compressed by bgzip (provided in this package), which has a gzip
+ like interface. After indexing, tabix is able to quickly retrieve data lines by
+ chromosomal coordinates. Fast data retrieval also works over network if an URI
+ is given as a file name.
+ .
+ This version of tabix is built from the HTSlib source.
