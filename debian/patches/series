@@ -1,0 +1,4 @@
+define_PATH_MAX.patch
+fPIC.patch
+testShebang.patch
+#fix_float_precision  # doesn't fix all errors on ppc64el yet
