@@ -1,0 +1,25 @@
+From: Gustavo Romero <gromero@linux.vnet.ibm.com>
+Subject: ppc64el float handling fix
+
+I dug a bit further and it looks like that sam_parse1() is actually
+generating a different value for the floats in question, so when they are
+loaded back for the comparison they are already screwed up
+
+because strtod() is used in float_to_le() and so also in u32_to_le(), which are
+inlined and float_to_le() takes a float and not a double as the first argument
+the use strtof() instead of strtod() in there looks the best, avoiding a
+truncation from double to float, which might cause precision issues, specially
+between different archs (like casts) plus optimization. So the following
+change fixed the issue for me.
+
+--- htslib.orig/sam.c
++++ htslib/sam.c
+@@ -1408,7 +1408,7 @@
+             else if (type == 'S') while (q + 1 < p) { u16_to_le(strtoul(q + 1, &q, 0), (uint8_t *) str.s + str.l); str.l += 2; _skip_to_comma(q, p); }
+             else if (type == 'i') while (q + 1 < p) { i32_to_le(strtol(q + 1, &q, 0), (uint8_t *) str.s + str.l); str.l += 4; _skip_to_comma(q, p); }
+             else if (type == 'I') while (q + 1 < p) { u32_to_le(strtoul(q + 1, &q, 0), (uint8_t *) str.s + str.l); str.l += 4; _skip_to_comma(q, p); }
+-            else if (type == 'f') while (q + 1 < p) { float_to_le(strtod(q + 1, &q), (uint8_t *) str.s + str.l); str.l += 4; _skip_to_comma(q, p); }
++            else if (type == 'f') while (q + 1 < p) { float_to_le(strtof(q + 1, &q), (uint8_t *) str.s + str.l); str.l += 4; _skip_to_comma(q, p); }
+             else _parse_err_param(1, "unrecognized type B:%c", type);
+ 
+ #undef _skip_to_comma
