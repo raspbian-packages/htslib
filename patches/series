@@ -1,0 +1,5 @@
+no_git_version
+define_PATH_MAX.patch
+fPIC.patch
+testShebang.patch
+fix_float_precision

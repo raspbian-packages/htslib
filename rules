@@ -1,0 +1,59 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DH_VERBOSE=1
+
+include /usr/share/dpkg/default.mk
+
+ifneq (,$(filter $(DEB_HOST_ARCH),i386 kfreebsd-i386 hurd-i386))
+  DEB_CFLAGS_MAINT_APPEND=-msse -mfpmath=sse
+endif
+DEB_CFLAGS_MAINT_APPEND+=-flto
+DEB_LDFLAGS_MAINT_APPEND+=-Wl,-flto
+
+export DEB_CFLAGS_MAINT_APPEND
+export DEB_LDFLAGS_MAINT_APPEND
+
+%:
+	dh $@
+
+override_dh_auto_configure:
+ifneq (,$(filter $(DEB_HOST_ARCH),i386 kfreebsd-i386 hurd-i386))
+	cp htslib.pc.in debian/
+	cp debian/i386-htslib.pc.in ./htslib.pc.in
+endif
+	# create clean copy of test dir
+	cp -a test test_backup
+	autoconf
+	dh_auto_configure -- --enable-libcurl --enable-gcs --enable-s3
+	
+override_dh_auto_build:
+	dh_auto_build -- \
+	  CFLAGS="$$(dpkg-buildflags --get CFLAGS)" \
+	  CPPFLAGS="-I. -DSAMTOOLS=1 $$(dpkg-buildflags --get CPPFLAGS)" \
+	  LDFLAGS="$$(dpkg-buildflags --get LDFLAGS)" \
+	  PACKAGE_VERSION="$(DEB_VERSION)" \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH)
+# re-try later	  LDLIBS=-lhts \
+
+override_dh_auto_install:
+	for binary in sam test-regidx hts_endian test-bcf-sr test_bgzf ; do \
+	    rm $(CURDIR)/test/$${binary} ; \
+	done
+	dh_auto_install -- prefix=/usr
+	# restore clean copy of test dir before dh_install is run
+	# This should not be done earlier since dh_auto_install contains some unconditional removals
+	$(RM) -r test
+	mv test_backup test
+
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS
+
+override_dh_auto_clean:
+ifneq (,$(filter $(DEB_HOST_ARCH),i386 kfreebsd-i386 hurd-i386))
+ifneq (,$(wildcard debian/htslib.pc.in))
+	cp debian/htslib.pc.in ./
+endif
+endif
+	dh_auto_clean
+	rm -rf test_backup/
