@@ -1,0 +1,21 @@
+Reference:
+ Author: "Heng Li"
+ Title: >
+  Tabix: fast retrieval of sequence features from generic TAB-delimited
+  files
+ Journal: Bioinformatics
+ Year: 2011
+ Volume: 27
+ Number: 5
+ Pages: 718-719
+ DOI: 10.1093/bioinformatics/btq671
+ PMID: 21208982
+ URL: "https://academic.oup.com/bioinformatics/article/27/5/718/262743/\
+  Tabix-fast-retrieval-of-sequence-features-from"
+ ePrint: "https://academic.oup.com/bioinformatics/article-pdf/\
+  27/5/718/5504485/btq671.pdf"
+Registry:
+ - Name: OMICtools
+   Entry: OMICS_13459
+ - Name: conda:bioconda
+   Entry: htslib
