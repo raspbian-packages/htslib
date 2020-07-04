@@ -1,0 +1,37 @@
+Author: Andreas Tille <tille@debian.org>,
+        Svante Signell <svante.signell@gmail.com>
+Last-Uudate: Wed, 31 Aug 2016 12:14:45 +0200
+Bug-Debian: https://bugs.debian.org/793512
+            https://bugs.debian.org/836190
+Description: Define PATH_MAX as it is done in cram/open_trace_file.c if
+ not existent.  The definition should be removed from this C file since the
+ header file affects all three C files where this definition is used.
+
+--- htslib.orig/cram/os.h
++++ htslib/cram/os.h
+@@ -159,6 +159,13 @@
+ }
+ #endif
+ 
++/*
++ * in case PATH_MAX is not defined (like in hurd)
++ */
++#ifndef PATH_MAX
++#  define PATH_MAX 1024
++#endif
++
+ /*-----------------------------------------------------------------------------
+  * Operating system specifics.
+  * These ought to be done by autoconf, but are legacy code.
+--- htslib.orig/cram/open_trace_file.c
++++ htslib/cram/open_trace_file.c
+@@ -73,9 +73,6 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include "cram/os.h"
+-#ifndef PATH_MAX
+-#  define PATH_MAX 1024
+-#endif
+ 
+ #include "cram/open_trace_file.h"
+ #include "cram/misc.h"
