@@ -1,0 +1,3 @@
+version=4
+opts="repack,compression=bz2,uversionmangle=s/-rc/~rc/" \
+  https://github.com/samtools/htslib/releases .*/htslib-(\d\S*)\.tar\.bz2
