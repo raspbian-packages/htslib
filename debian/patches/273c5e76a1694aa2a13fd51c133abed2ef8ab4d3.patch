@@ -1,0 +1,22 @@
+From 273c5e76a1694aa2a13fd51c133abed2ef8ab4d3 Mon Sep 17 00:00:00 2001
+From: Andrew Whitwham <whitwham@users.noreply.github.com>
+Date: Wed, 30 Sep 2020 09:37:45 +0100
+Subject: [PATCH] Variable name used in dlsym corrected.
+Bug-Debian: https://bugs.debian.org/971542
+
+The hfile irods plugin depends on a constructed symbol name which was no longer being used.
+---
+ plugin.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/plugin.c
++++ b/plugin.c
+@@ -153,7 +153,7 @@ plugin_void_func *load_plugin(void **plu
+         const char *basename = slash? slash+1 : filename;
+         kputsn(basename, strcspn(basename, ".-+"), &symbolg);
+ 
+-        *(void **) &sym = dlsym(lib, symbol);
++        *(void **) &sym = dlsym(lib, symbolg.s);
+         free(symbolg.s);
+         if (sym == NULL) goto error;
+     }

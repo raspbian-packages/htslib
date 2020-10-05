@@ -1,0 +1,9 @@
+no_git_version
+define_PATH_MAX.patch
+fPIC.patch
+testShebang.patch
+fix_float_precision
+# big-endian
+cram_to_bam_export.patch
+273c5e76a1694aa2a13fd51c133abed2ef8ab4d3.patch
+plugins_to_lib.patch

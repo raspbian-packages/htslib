@@ -1,0 +1,20 @@
+Author: Andreas Tille <tille@debian.org>
+Last-Update: Fri, 02 Oct 2020 11:35:21 +0200
+Description: Debian has no libexecdir - plugins should go to libdir
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -115,11 +115,11 @@ AC_ARG_WITH([libdeflate],
+ 
+ AC_ARG_WITH([plugin-dir],
+   [AS_HELP_STRING([--with-plugin-dir=DIR],
+-                  [plugin installation location [LIBEXECDIR/htslib]])],
++                  [plugin installation location [LIBDIR/htslib]])],
+   [case $withval in
+      yes|no) MSG_ERROR([no directory specified for --with-plugin-dir]) ;;
+    esac],
+-   [with_plugin_dir='$(libexecdir)/htslib'])
++   [with_plugin_dir='$(libdir)/htslib'])
+ AC_SUBST([plugindir], $with_plugin_dir)
+ 
+ AC_ARG_WITH([plugin-path],
