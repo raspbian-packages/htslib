@@ -1,0 +1,23 @@
+From: Rob Davies <rmd+git@sanger.ac.uk>
+Date: Mon, 3 Feb 2020 13:45:20 +0000
+Subject: [PATCH] Add / fix byte swapping code for big-endian platforms
+ Properly swap expanded l->n in idx_read_core()
+ .
+ Fix various places where bcf INFO and FORMAT values were not
+ being accessed correctly.
+ .
+ Seems the original patch was adopted upstream.  This last remaining
+ taken over from the original patch is probably not needed any more
+ and thus the patch is deactivated.
+
+--- a/hts.c
++++ b/hts.c
+@@ -2206,7 +2206,7 @@ static int idx_read_core(hts_idx_t *idx,
+         bins_t *p;
+         h = idx->bidx[i] = kh_init(bin);
+         if (bgzf_read(fp, &n, 4) != 4) return -1;
+-        if (is_be) ed_swap_4p(&n);
++        if (is_be) ed_swap_8p(&n);
+         if (n < 0) return -3;
+         for (j = 0; j < n; ++j) {
+             khint_t k;
