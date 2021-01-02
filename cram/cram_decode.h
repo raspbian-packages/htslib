@@ -106,6 +106,23 @@ int cram_decode_slice(cram_fd *fd, cram_container *c, cram_slice *s,
 
 
 /*
+ * Converts a cram in-memory record into a bam in-memory record. We
+ * pass a pointer to a bam_seq_t pointer along with the a pointer to
+ * the allocated size. These can initially be pointers to NULL and zero.
+ *
+ * This function will reallocate the bam buffer as required and update
+ * (*bam)->alloc accordingly, allowing it to be used within a loop
+ * efficiently without needing to allocate new bam objects over and
+ * over again.
+ *
+ * Returns the used size of the bam record on success
+ *         -1 on failure.
+ */
+int cram_to_bam(SAM_hdr * const bfd, const cram_fd * const fd, cram_slice * const s,
+                cram_record *const cr, int rec, bam_seq_t **bam);
+
+
+/*
  * Drains and frees the decode read-queue for a multi-threaded reader.
  */
 void cram_drain_rqueue(cram_fd *fd);
