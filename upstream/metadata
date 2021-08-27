@@ -1,0 +1,42 @@
+---
+Reference:
+ - Author: Heng Li
+   Title: >
+    Tabix: fast retrieval of sequence features from generic TAB-delimited files
+   Journal: Bioinformatics
+   Year: 2011
+   Volume: 27
+   Number: 5
+   Pages: 718-719
+   DOI: 10.1093/bioinformatics/btq671
+   PMID: 21208982
+   URL: "https://academic.oup.com/bioinformatics/article/\
+    27/5/718/262743/Tabix-fast-retrieval-of-sequence-features-from"
+   ePrint: >
+    https://academic.oup.com/bioinformatics/article-pdf/27/5/718/5504485/btq671.pdf
+ - Author: >
+    Bonfield, James K. and Marshall, John and Danecek, Petr and Li, Heng and
+    Ohan, Valeriu and Whitwham, Andrew and Keane, Thomas and Davies, Robert M.
+   Title: HTSlib - C library for reading/writing high-throughput sequencing data
+   Year: 2020
+   DOI: 10.1101/2020.12.16.423064
+   Publisher: Cold Spring Harbor Laboratory
+   URL: https://www.biorxiv.org/content/early/2020/12/16/2020.12.16.423064
+   ePrint: >
+    https://www.biorxiv.org/content/early/2020/12/16/2020.12.16.423064.full.pdf
+Registry:
+ - Name: OMICtools
+   Entry: OMICS_13459
+ - Name: conda:bioconda
+   Entry: htslib
+ - Name: guix
+   Entry: htslib
+ - Name: SciCrunch
+   Entry: NA
+   Checked: 2021-05-24
+ - Name: bio.tools
+   Entry: htslib
+Bug-Database: https://github.com/samtools/htslib/issues
+Repository: https://github.com/samtools/htslib.git
+Repository-Browse: https://github.com/samtools/htslib
+Bug-Submit: samtools-help@lists.sourceforge.net
