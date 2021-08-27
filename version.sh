@@ -28,11 +28,11 @@ VERSION=1.13
 
 # If we have a git clone, then check against the current tag
 srcdir=${0%/version.sh}
-if [ -e $srcdir/.git ]
-then
-    # If we ever get to 10.x this will need to be more liberal
-    VERSION=`cd $srcdir && git describe --match '[0-9].[0-9]*' --dirty`
-fi
+#if [ -e $srcdir/.git ]
+#then
+#    # If we ever get to 10.x this will need to be more liberal
+#    VERSION=`cd $srcdir && git describe --match '[0-9].[0-9]*' --dirty`
+#fi
 
 # Numeric version is for use in .dylib or .so libraries
 #
