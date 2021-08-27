@@ -57,7 +57,7 @@ test_command($opts,cmd=>'test-bcf-translate -',out=>'test-bcf-translate.out');
 test_convert_padded_header($opts);
 test_rebgzip($opts);
 test_logging($opts);
-test_plugin_loading($opts);
+#test_plugin_loading($opts);
 test_realn($opts);
 
 print "\nNumber of tests:\n";
