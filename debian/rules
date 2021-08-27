@@ -1,0 +1,118 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DH_VERBOSE=1
+
+include /usr/share/dpkg/default.mk
+
+ifneq (,$(filter $(DEB_HOST_ARCH),i386 kfreebsd-i386 hurd-i386))
+  DEB_CFLAGS_MAINT_APPEND=-msse -mfpmath=sse
+endif
+DEB_CFLAGS_MAINT_APPEND+=-flto -fvisibility=hidden
+DEB_LDFLAGS_MAINT_APPEND+=-Wl,-flto -fvisibility=hidden
+
+export DEB_CFLAGS_MAINT_APPEND
+export DEB_LDFLAGS_MAINT_APPEND
+
+
+%:
+	dh $@
+
+hello:
+	echo "Upstream version: $(DEB_VERSION_UPSTREAM)"
+
+override_dh_auto_configure:
+ifneq (,$(filter $(DEB_HOST_ARCH),i386 kfreebsd-i386 hurd-i386))
+	cp htslib.pc.in debian/
+	cp debian/i386-htslib.pc.in ./htslib.pc.in
+endif
+	# create clean copy of test dir
+	cp -a test test_backup
+	# to help with cross building, otherwise MMAP might get turned off
+	export ac_cv_func_mmap_fixed_mapped=yes && autoconf && \
+	dh_auto_configure -- --enable-libcurl --enable-gcs --enable-s3 --enable-plugins --with-plugin-dir='$(libdir)/htslib' --with-external-htscodecs --with-plugin-path='/usr/local/lib/htslib:/usr/local/libexec/htslib:$(plugindir)'
+
+override_dh_auto_build-arch:
+	dh_auto_build -- \
+	  CFLAGS="$$(dpkg-buildflags --get CFLAGS)" \
+	  CPPFLAGS="-I. -DSAMTOOLS=1 $$(dpkg-buildflags --get CPPFLAGS)" \
+	  LDFLAGS="$$(dpkg-buildflags --get LDFLAGS)" \
+	  PACKAGE_VERSION="$(DEB_VERSION_UPSTREAM)" \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH)
+# re-try later	  LDLIBS=-lhts \
+
+override_dh_auto_build-indep:
+
+override_dh_auto_install-arch:
+	for binary in sam test-regidx hts_endian test-bcf-sr test_bgzf ; do \
+	    rm $(CURDIR)/test/$${binary} ; \
+	done
+	dh_auto_install -- prefix=/usr \
+	  CFLAGS="$$(dpkg-buildflags --get CFLAGS)" \
+	  CPPFLAGS="-I. -DSAMTOOLS=1 $$(dpkg-buildflags --get CPPFLAGS)" \
+	  LDFLAGS="$$(dpkg-buildflags --get LDFLAGS)" \
+	  PACKAGE_VERSION="$(DEB_VERSION_UPSTREAM)" \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH)
+	# restore clean copy of test dir before dh_install is run
+	# This should not be done earlier since dh_auto_install contains some unconditional removals
+	$(RM) -r test
+	mv test_backup test
+
+override_dh_strip:
+	# This is apparently important for the interpretation by ldc2 in sambamba
+	dh_strip -Xlibhts.a
+
+override_dh_auto_install-indep:
+
+override_dh_auto_test-arch:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	dh_auto_test -- \
+	  CFLAGS="$$(dpkg-buildflags --get CFLAGS)" \
+	  CPPFLAGS="-I. -DSAMTOOLS=1 $$(dpkg-buildflags --get CPPFLAGS)" \
+	  LDFLAGS="$$(dpkg-buildflags --get LDFLAGS)" \
+	  PACKAGE_VERSION="$(DEB_VERSION_UPSTREAM)" \
+	  libdir=/usr/lib/$(DEB_HOST_MULTIARCH) \
+	  || \
+	  if find . -name "FAIL*" > /dev/null ; then \
+	    for file in $$(find . -name "FAIL*"); do echo $${file}; cat $${file}; done && false ; \
+	  fi
+endif
+
+override_dh_auto_test-indep:
+ifeq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
+	echo "Suppress test for Architecture independant builds."
+endif
+
+override_dh_install-indep:
+	dh_install --indep
+	sed -i 's/-ffile-prefix-map=[^[:space:]]* //g' debian/htslib-test/usr/share/htslib-test/config.mk
+	sed -i 's/-fdebug-prefix-map=[^[:space:]]* //g' debian/htslib-test/usr/share/htslib-test/config.mk
+	sed -i 's#\.\./\.\./htslib/#htslib/#' `grep -Rl '../../htslib/' debian/htslib-test/*`
+
+override_dh_installdocs:
+	dh_installdocs
+	# Fix Perl interpreter path
+	for pl in `grep -Rl '#!/usr/bin/env[[:space:]]\+perl' debian/*/usr/*` ; do \
+	    sed -i '1s?^#!/usr/bin/env[[:space:]]\+perl?#!/usr/bin/perl?' $${pl} ; \
+	done
+
+override_dh_installchangelogs:
+	dh_installchangelogs NEWS
+
+override_dh_missing:
+	# FIXME: No idea why these files are remaining in debian/tmp
+	rm -rf debian/tmp/usr/bin debian/tmp/usr/share/man
+	dh_missing
+
+override_dh_fixperms:
+	dh_fixperms
+	find debian -name simple_test_driver.sh -exec chmod +x \{\} \;
+
+override_dh_auto_clean:
+ifneq (,$(filter $(DEB_HOST_ARCH),i386 kfreebsd-i386 hurd-i386))
+ifneq (,$(wildcard debian/htslib.pc.in))
+	cp debian/htslib.pc.in ./
+endif
+endif
+	dh_auto_clean
+	rm -rf test_backup/
