@@ -1,0 +1,13 @@
+Author: Steffen Moeller <moeller@debian.org>
+Description: This test contacts a localhost, which fails, like all networking should fail during testing? Unsure.
+--- a/test/test.pl
++++ b/test/test.pl
+@@ -58,7 +58,7 @@ test_command($opts,cmd=>'test-bcf-transl
+ test_convert_padded_header($opts);
+ test_rebgzip($opts);
+ test_logging($opts);
+-test_plugin_loading($opts);
++#test_plugin_loading($opts);
+ test_realn($opts);
+ test_bcf_set_variant_type($opts);
+ 

@@ -1,0 +1,43 @@
+Description: Exports the cram_to_bam function to support the
+  sambamba package.
+Author: Roel Janssen <roel@gnu.org>
+
+--- a/cram/cram_decode.c
++++ b/cram/cram_decode.c
+@@ -2999,8 +2999,8 @@ int cram_decode_slice_mt(cram_fd *fd, cr
+  * Returns the used size of the bam record on success
+  *         -1 on failure.
+  */
+-static int cram_to_bam(sam_hdr_t *sh, cram_fd *fd, cram_slice *s,
+-                       cram_record *cr, int rec, bam_seq_t **bam) {
++int cram_to_bam(sam_hdr_t * const sh, const cram_fd * const fd, cram_slice * const s,
++                       cram_record * const cr, int rec, bam_seq_t ** const bam) {
+     int ret, rg_len;
+     char name_a[1024], *name;
+     int name_len;
+--- a/cram/cram_decode.h
++++ b/cram/cram_decode.h
+@@ -106,6 +106,23 @@ int cram_decode_slice(cram_fd *fd, cram_
+ 
+ 
+ /*
++ * Converts a cram in-memory record into a bam in-memory record. We
++ * pass a pointer to a bam_seq_t pointer along with the a pointer to
++ * the allocated size. These can initially be pointers to NULL and zero.
++ *
++ * This function will reallocate the bam buffer as required and update
++ * (*bam)->alloc accordingly, allowing it to be used within a loop
++ * efficiently without needing to allocate new bam objects over and
++ * over again.
++ *
++ * Returns the used size of the bam record on success
++ *         -1 on failure.
++ */
++int cram_to_bam(SAM_hdr * const bfd, const cram_fd * const fd, cram_slice * const s,
++                cram_record *const cr, int rec, bam_seq_t ** const bam);
++
++
++/*
+  * Drains and frees the decode read-queue for a multi-threaded reader.
+  */
+ void cram_drain_rqueue(cram_fd *fd);
