@@ -1,0 +1,8 @@
+no_git_version
+define_PATH_MAX.patch
+fPIC.patch
+testShebang.patch
+fix_float_precision
+cram_to_bam_export.patch
+fix_sequence_of_linked_libs.patch
+trim-file-prefix.patch
