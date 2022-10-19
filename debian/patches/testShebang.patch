@@ -1,0 +1,21 @@
+Description: Build with -fPIC instead of -fpic
+ It doesn't make a difference on x86, but is required for
+ linking the library on s390x and sparc64.
+Author: Adrian Bunk <bunk@debian.org>
+
+--- a/test/test-logging.pl
++++ b/test/test-logging.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ #
+ #    Copyright (C) 2017 Genome Research Ltd.
+ #
+--- a/test/test.pl
++++ b/test/test.pl
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env perl
++#!/usr/bin/perl
+ #
+ #    Copyright (C) 2012-2022 Genome Research Ltd.
+ #
