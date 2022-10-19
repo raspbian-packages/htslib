@@ -1,4 +1,4 @@
-#!/usr/bin/env perl
+#!/usr/bin/perl
 #
 #    Copyright (C) 2017 Genome Research Ltd.
 #
