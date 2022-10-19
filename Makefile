@@ -163,7 +163,9 @@ show-version:
 config_vars.h:
 	echo '#define HTS_CC "$(CC)"' > $@
 	echo '#define HTS_CPPFLAGS "$(CPPFLAGS)"' >> $@
-	echo '#define HTS_CFLAGS "$(CFLAGS)"' >> $@
+	echo '#define HTS_CFLAGS "$(CFLAGS)"' \
+	| sed 's/-ffile-prefix-map=[^ ]*=.//' \
+	>> $@
 	echo '#define HTS_LDFLAGS "$(LDFLAGS)"' >> $@
 	echo '#define HTS_LIBS "$(LIBS)"' >> $@
 
