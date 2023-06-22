@@ -1,0 +1,17 @@
+Description: fix cram htscodecs duplicate extension in header inclusion
+Author: Étienne Mollier <emollier@debian.org>
+Forwarded: https://github.com/samtools/htslib/pull/1633
+Last-Update: 2023-06-11
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- htslib.orig/cram/cram_external.c
++++ htslib/cram/cram_external.c
+@@ -43,7 +43,7 @@
+ #include <stdint.h>
+ 
+ #if defined(HAVE_EXTERNAL_LIBHTSCODECS)
+-#include <htscodecs/rANS_static4x16.h.h>
++#include <htscodecs/rANS_static4x16.h>
+ #else
+ #include "../htscodecs/htscodecs/rANS_static4x16.h"
+ #endif

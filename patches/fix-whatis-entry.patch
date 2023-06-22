@@ -1,0 +1,16 @@
+Description: htslib-s3-plugin.7: fix whatis entry
+Author: Étienne Mollier <emollier@debian.org>
+Forwarded: https://github.com/samtools/htslib/pull/1634
+Last-Update: 2023-06-11
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- htslib.orig/htslib-s3-plugin.7
++++ htslib/htslib-s3-plugin.7
+@@ -1,6 +1,6 @@
+ .TH htslib-s3-plugin 7 "21 February 2023" "htslib-1.17" "Bioinformatics tools"
+ .SH NAME
+-s3 plugin \- htslib AWS S3 plugin
++htslib-s3-plugin \- htslib AWS S3 plugin
+ .\"
+ .\" Copyright (C) 2021-2022 Genome Research Ltd.
+ .\"
