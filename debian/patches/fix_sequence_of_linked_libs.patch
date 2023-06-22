@@ -1,0 +1,26 @@
+Author: Andreas Tille <tille@debian.org>
+Last-Update: Thu, 29 Sep 2022 13:39:16 +0200
+Origin: https://lists.debian.org/debian-med/2022/09/msg00053.html
+Description: Make sure all symbols of libhts will be really found
+FIXME: It would be more elegant to specify libhts.a at the *correct* position rather than force it twice.
+       Even better would be dynamic linking since we are creating libhts.so as well
+
+--- htslib.orig/Makefile
++++ htslib/Makefile
+@@ -497,13 +497,13 @@
+ htscodecs/htscodecs/rANS_static32x16pr_sse4.o htscodecs/htscodecs/rANS_static32x16pr_sse4.pico: TARGET_CFLAGS = $(HTS_CFLAGS_SSE4)
+ 
+ bgzip: bgzip.o libhts.a
+-	$(CC) $(LDFLAGS) -o $@ bgzip.o libhts.a $(LIBS) -lpthread
++	$(CC) $(LDFLAGS) -o $@ bgzip.o libhts.a $(LIBS) libhts.a -lpthread
+ 
+ htsfile: htsfile.o libhts.a
+-	$(CC) $(LDFLAGS) -o $@ htsfile.o libhts.a $(LIBS) -lpthread
++	$(CC) $(LDFLAGS) -o $@ htsfile.o libhts.a $(LIBS) libhts.a -lpthread
+ 
+ tabix: tabix.o libhts.a
+-	$(CC) $(LDFLAGS) -o $@ tabix.o libhts.a $(LIBS) -lpthread
++	$(CC) $(LDFLAGS) -o $@ tabix.o libhts.a $(LIBS) libhts.a -lpthread
+ 
+ bgzip.o: bgzip.c config.h $(htslib_bgzf_h) $(htslib_hts_h) $(htslib_hfile_h)
+ htsfile.o: htsfile.c config.h $(htslib_hfile_h) $(htslib_hts_h) $(htslib_sam_h) $(htslib_vcf_h)
