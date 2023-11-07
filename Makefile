@@ -184,7 +184,9 @@ config_vars.h:
 	'$(hts_cppflags_escaped)' \
 	'$(hts_cflags_escaped)' \
 	'$(hts_ldflags_escaped)' \
-	'$(hts_libs_escaped)' > $@
+	'$(hts_libs_escaped)' \
+	| sed 's/-ffile-prefix-map=[^ ]*=.//' \
+	> $@
 
 .SUFFIXES: .bundle .c .cygdll .dll .o .pico .so
 
