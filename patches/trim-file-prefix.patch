@@ -1,0 +1,20 @@
+Description: trim build path from config_vars.
+ This is done in hope to improve build reproducibility.
+Author: Étienne Mollier <emollier@debian.org>
+Forwarded: no
+Last-Update: 2022-10-19
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+--- htslib.orig/Makefile
++++ htslib/Makefile
+@@ -184,7 +184,9 @@
+ 	'$(hts_cppflags_escaped)' \
+ 	'$(hts_cflags_escaped)' \
+ 	'$(hts_ldflags_escaped)' \
+-	'$(hts_libs_escaped)' > $@
++	'$(hts_libs_escaped)' \
++	| sed 's/-ffile-prefix-map=[^ ]*=.//' \
++	> $@
+ 
+ .SUFFIXES: .bundle .c .cygdll .dll .o .pico .so
+ 
