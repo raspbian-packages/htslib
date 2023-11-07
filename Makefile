@@ -509,13 +509,13 @@ htscodecs/htscodecs/rANS_static32x16pr_avx512.o htscodecs/htscodecs/rANS_static3
 htscodecs/htscodecs/rANS_static32x16pr_sse4.o htscodecs/htscodecs/rANS_static32x16pr_sse4.pico: TARGET_CFLAGS = $(HTS_CFLAGS_SSE4)
 
 bgzip: bgzip.o libhts.a
-	$(CC) $(LDFLAGS) -o $@ bgzip.o libhts.a $(LIBS) -lpthread
+	$(CC) $(LDFLAGS) -o $@ bgzip.o libhts.a $(LIBS) libhts.a -lpthread
 
 htsfile: htsfile.o libhts.a
-	$(CC) $(LDFLAGS) -o $@ htsfile.o libhts.a $(LIBS) -lpthread
+	$(CC) $(LDFLAGS) -o $@ htsfile.o libhts.a $(LIBS) libhts.a -lpthread
 
 tabix: tabix.o libhts.a
-	$(CC) $(LDFLAGS) -o $@ tabix.o libhts.a $(LIBS) -lpthread
+	$(CC) $(LDFLAGS) -o $@ tabix.o libhts.a $(LIBS) libhts.a -lpthread
 
 bgzip.o: bgzip.c config.h $(htslib_bgzf_h) $(htslib_hts_h) $(htslib_hfile_h)
 htsfile.o: htsfile.c config.h $(htslib_hfile_h) $(htslib_hts_h) $(htslib_sam_h) $(htslib_vcf_h)
