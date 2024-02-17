@@ -1,0 +1,2 @@
+# As needed for testing
+htslib-test: compressed-duplicate [usr/share/htslib-test/test/bgziptest.txt.gz]
