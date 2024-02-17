@@ -1,0 +1,34 @@
+From: Gustavo Romero <gromero@linux.vnet.ibm.com>
+Subject: ppc64el float handling fix
+
+I dug a bit further and it looks like that sam_parse1() is actually
+generating a different value for the floats in question, so when they are
+loaded back for the comparison they are already screwed up
+
+because strtod() is used in float_to_le() and so also in u32_to_le(), which are
+inlined and float_to_le() takes a float and not a double as the first argument
+the use strtof() instead of strtod() in there looks the best, avoiding a
+truncation from double to float, which might cause precision issues, specially
+between different archs (like casts) plus optimization. So the following
+change fixed the issue for me.
+
+--- htslib.orig/sam.c
++++ htslib/sam.c
+@@ -2464,7 +2464,7 @@
+         }
+     } else if (type == 'f') {
+         while (q < r) {
+-            float_to_le(strtod(q + 1, &q), b->data + b->l_data);
++            float_to_le(strtof(q + 1, &q), b->data + b->l_data);
+             b->l_data += 4;
+             skip_to_comma_(q);
+         }
+@@ -2641,7 +2641,7 @@
+             }
+         } else if (type == 'f') {
+             b->data[b->l_data++] = 'f';
+-            float_to_le(strtod(q, &q), b->data + b->l_data);
++            float_to_le(strtof(q, &q), b->data + b->l_data);
+             b->l_data += sizeof(float);
+         } else if (type == 'd') {
+             b->data[b->l_data++] = 'd';
