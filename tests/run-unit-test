@@ -1,0 +1,30 @@
+#!/bin/bash
+set -e
+set -x
+
+pkg="htslib"
+
+if [ "$AUTOPKGTEST_TMP" = "" ] ; then
+    AUTOPKGTEST_TMP=$(mktemp -d /tmp/${pkg}-test.XXXXXX)
+    trap "rm -rf ${AUTOPKGTEST_TMP}" 0 INT QUIT ABRT PIPE TERM
+fi
+
+cp -aL /usr/share/${pkg}-test/* "$AUTOPKGTEST_TMP"
+cp -aL htslib.pc.in "$AUTOPKGTEST_TMP"
+cp -aL htslib.map "$AUTOPKGTEST_TMP"
+
+cd "$AUTOPKGTEST_TMP"
+
+sed -i 's#\$(HTSPREFIX)#/usr/include/#g' htslib_vars.mk
+sed -i 's#\$(HTSLIB)#/usr/include/#g' htslib.mk
+
+CFLAGS="-O2 -fno-strict-aliasing -fno-code-hoisting"
+
+if grep sse /proc/cpuinfo > /dev/null; then
+	CFLAGS="${CFLAGS} -msse -mfpmath=sse"
+fi
+export CFLAGS
+
+make -e check
+
+echo "PASS"
