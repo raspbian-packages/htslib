@@ -1,0 +1,3 @@
+bgzip	usr/bin
+htsfile	usr/bin
+tabix	usr/bin
