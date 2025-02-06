@@ -1,0 +1,6 @@
+# As needed for testing
+htslib-test: compressed-duplicate [usr/share/htslib-test/test/bgziptest.txt.gz]
+
+# These test files contain numerical data for the test suite and are not
+# documentation per se.
+htslib-test: package-contains-documentation-outside-usr-share-doc [usr/share/htslib-test/test/annot-tsv/*.txt]
