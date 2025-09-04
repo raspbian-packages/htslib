@@ -556,13 +556,13 @@ annot-tsv: annot-tsv.o libhts.a
 	$(CC) $(LDFLAGS) -o $@ annot-tsv.o libhts.a $(LIBS) -lpthread
 
 bgzip: bgzip.o libhts.a
-	$(CC) $(LDFLAGS) -o $@ bgzip.o libhts.a $(LIBS) -lpthread
+	$(CC) $(LDFLAGS) -o $@ bgzip.o libhts.a $(LIBS) libhts.a -lpthread
 
 htsfile: htsfile.o libhts.a
-	$(CC) $(LDFLAGS) -o $@ htsfile.o libhts.a $(LIBS) -lpthread
+	$(CC) $(LDFLAGS) -o $@ htsfile.o libhts.a $(LIBS) libhts.a -lpthread
 
 tabix: tabix.o libhts.a
-	$(CC) $(LDFLAGS) -o $@ tabix.o libhts.a $(LIBS) -lpthread
+	$(CC) $(LDFLAGS) -o $@ tabix.o libhts.a $(LIBS) libhts.a -lpthread
 
 ref_cache/ref-cache: $(REF_CACHE_OBJS)
 	$(CC) $(LDFLAGS) $(REF_CACHE_EXTRA_LD_FLAGS) -o $@ $(REF_CACHE_OBJS) -lcurl
