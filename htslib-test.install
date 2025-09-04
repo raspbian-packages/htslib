@@ -1,0 +1,24 @@
+*.in		usr/share/htslib-test
+*.c		usr/share/htslib-test
+# not *.h, don't ship 'config.h'
+bcf_sr_sort.h	usr/share/htslib-test
+fuzz_settings.h	usr/share/htslib-test
+header.h	usr/share/htslib-test
+hfile_internal.h	usr/share/htslib-test
+hts_internal.h	usr/share/htslib-test
+hts_time_funcs.h	usr/share/htslib-test
+sam_internal.h	usr/share/htslib-test
+textutils_internal.h	usr/share/htslib-test
+thread_pool_internal.h	usr/share/htslib-test
+hts*.mk		usr/share/htslib-test
+configure.ac	usr/share/htslib-test
+Makefile	usr/share/htslib-test
+cram/*.c	usr/share/htslib-test/cram
+cram/*.h	usr/share/htslib-test/cram
+m4/*		usr/share/htslib-test/m4
+os		usr/share/htslib-test
+ref_cache/*.c	usr/share/htslib-test/ref_cache
+ref_cache/*.h	usr/share/htslib-test/ref_cache
+test/*		usr/share/htslib-test/test
+version.sh	usr/share/htslib-test
+debian/tests/run-unit-test	usr/share/doc/libhts-dev
