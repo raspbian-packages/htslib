@@ -2570,7 +2570,7 @@ static char *sam_parse_Bf_vals(bam1_t *b, char *q, uint32_t *nused,
             if (grow_B_array(b, nalloc, 4) < 0)
                 return NULL;
         }
-        float_to_le(strtod(q + 1, &q), b->data + b->l_data);
+        float_to_le(strtof(q + 1, &q), b->data + b->l_data);
         b->l_data += 4;
     }
     return q;
@@ -2835,7 +2835,7 @@ static inline int aux_parse(char *start, char *end, bam1_t *b, int lenient,
             }
         } else if (type == 'f') {
             b->data[b->l_data++] = 'f';
-            float_to_le(strtod(q, &q), b->data + b->l_data);
+            float_to_le(strtof(q, &q), b->data + b->l_data);
             b->l_data += sizeof(float);
         } else if (type == 'd') {
             b->data[b->l_data++] = 'd';
