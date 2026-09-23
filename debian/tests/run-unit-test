@@ -1,0 +1,58 @@
+#!/bin/bash
+set -e
+set -x
+
+pkg="htslib"
+
+if [ "$AUTOPKGTEST_TMP" = "" ] ; then
+    AUTOPKGTEST_TMP=$(mktemp -d /tmp/${pkg}-test.XXXXXX)
+    trap "rm -rf ${AUTOPKGTEST_TMP}" 0 INT QUIT ABRT PIPE TERM
+fi
+
+cp -aL /usr/share/${pkg}-test/* "$AUTOPKGTEST_TMP"
+cp -aL htslib.pc.in "$AUTOPKGTEST_TMP"
+cp -aL htslib.map "$AUTOPKGTEST_TMP"
+
+cd "$AUTOPKGTEST_TMP"
+
+sed -i 's#\$(HTSPREFIX)#/usr/include/#g' htslib_vars.mk
+sed -i 's#\$(HTSLIB)#/usr/include/#g' htslib.mk
+
+CFLAGS="-O2 -fno-strict-aliasing -fno-code-hoisting"
+
+if grep sse /proc/cpuinfo > /dev/null; then
+	CFLAGS="${CFLAGS} -msse -mfpmath=sse"
+fi
+export CFLAGS
+
+DEB_HOST_MULTIARCH=$(dpkg-architecture -qDEB_HOST_MULTIARCH)
+libdir="/usr/lib/${DEB_HOST_MULTIARCH}"
+plugindir="${libdir}/htslib"
+export ac_cv_func_mmap_fixed_mapped=yes
+autoreconf -f -i
+./configure \
+	"--build=${DEB_HOST_MULTIARCH}" \
+	--prefix=/usr \
+	--includedir="\${prefix}/include" \
+	--mandir="\${prefix}/share/man" \
+	--infodir="\${prefix}/share/info" \
+	--sysconfdir=/etc \
+	--localstatedir=/var \
+	--disable-option-checking \
+	--disable-silent-rules \
+	--libdir="\${prefix}/lib/${DEB_HOST_MULTIARCH}" \
+	--runstatedir=/run \
+	--disable-maintainer-mode \
+	--disable-dependency-tracking \
+	--enable-libcurl \
+	--enable-gcs \
+	--enable-s3 \
+	--enable-plugins \
+	--with-plugin-dir="${libdir}/htslib" \
+	--with-external-htscodecs \
+	--with-plugin-path="/usr/local/lib/htslib:/usr/local/libexec/htslib:${plugindir}"
+
+
+make -e check
+
+echo "PASS"

@@ -1,0 +1,10 @@
+Notes on how this package can be tested.
+────────────────────────────────────────
+
+To run the unit tests provided by the upstream authors of this package
+you can install the package htslib-test and run
+
+   sh /usr/share/doc/libhts-dev/run-unit-test
+
+ -- Andreas Tille <tille@debian.org>  Wed, 14 Feb 2018 09:43:36 +0100
+
