@@ -1,0 +1,3 @@
+# Per comment in d/rules, this is apparently important for the
+# interpretation by ldc2 in sambamba.
+unstripped-static-library (*) [usr/lib/*/libhts.a]
